@@ -70,6 +70,10 @@ const ProductContent = async ({ params }: ProductPageProps) => {
     ? markets.reduce((sum, m) => sum + (m.min + m.max) / 2, 0) / markets.length
     : today;
 
+  const sortedMarkets = [...markets].sort(
+    (a, b) => a.min + a.max - (b.min + b.max),
+  );
+
   const stats = [
     {
       label: "সর্বনিম্ন দাম",
@@ -92,8 +96,9 @@ const ProductContent = async ({ params }: ProductPageProps) => {
   ];
 
   return (
-    <div className="mx-auto max-w-[90vw] space-y-6 px-4 py-6">
-      <nav className="flex gap-2 text-sm text-gray-600">
+    <div className="mx-auto max-w-[90vw] space-y-4 px-4 py-4 sm:space-y-6 sm:py-6">
+      {/* ব্রেডক্রাম্ব */}
+      <nav className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-600 sm:text-sm">
         <Link href="/" className="hover:text-green-700">
           হোম
         </Link>
@@ -108,78 +113,125 @@ const ProductContent = async ({ params }: ProductPageProps) => {
         <span className="text-gray-900">{product.nameBn}</span>
       </nav>
 
-      <section className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/70 p-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
-          <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-4xl">
+      {/* হেডার কার্ড */}
+      <section className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-5 md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-3xl sm:h-20 sm:w-20 sm:text-4xl">
             {product.image}
           </span>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">
               {product.nameBn}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs text-gray-600 sm:text-sm">
               প্রতি {unit} · {product.categoryNameBn}
             </p>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-xs text-gray-600 sm:text-sm">
               গতকালের তুলনায় আজ দাম <b>{t.text}</b> ·{" "}
               {bn(Math.abs(today - yesterday))} টাকা
             </p>
           </div>
         </div>
 
-        <div className="rounded-xl bg-gray-100 px-6 py-4 text-center">
-          <p className="text-sm text-gray-600">আজকের দাম</p>
-          <p className="text-3xl font-bold text-gray-900">{bn(today)}</p>
-          <p className="text-sm text-gray-600">টাকা / {unit}</p>
+        <div className="flex items-center justify-between gap-3 rounded-xl bg-gray-100 px-4 py-3 md:block md:px-6 md:py-4 md:text-center">
+          <div>
+            <p className="text-xs text-gray-600 sm:text-sm">আজকের দাম</p>
+            <p className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              {bn(today)}{" "}
+              <span className="text-xs font-normal text-gray-600 sm:text-sm md:block">
+                টাকা / {unit}
+              </span>
+            </p>
+          </div>
           <p className={`text-sm font-semibold ${t.color}`}>
             {t.icon} {bn(Math.abs(change.pct))}%
           </p>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-gray-200 bg-white/70 p-5">
-        <h2 className="mb-4 text-lg font-bold text-gray-900">
+      {/* সারসংক্ষেপ + বাজারভিত্তিক দাম */}
+      <section className="rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-5">
+        <h2 className="mb-3 text-base font-bold text-gray-900 sm:mb-4 sm:text-lg">
           দামের সারসংক্ষেপ
         </h2>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           {stats.map((s) => (
             <div
               key={s.label}
-              className="rounded-xl border border-gray-200 bg-white p-4"
+              className="rounded-xl border border-gray-200 bg-white p-3 sm:p-4"
             >
               <p className="text-xs text-gray-600">{s.label}</p>
-              <p className={`mt-1 text-2xl font-bold ${s.color}`}>
+              <p className={`mt-1 text-xl font-bold sm:text-2xl ${s.color}`}>
                 {s.value !== undefined ? bn(s.value) : "-"}{" "}
                 <span className="text-sm font-normal">টাকা</span>
               </p>
-              <p className="mt-1 text-xs text-gray-600">{s.note}</p>
+              <p className="mt-1 truncate text-xs text-gray-600">{s.note}</p>
             </div>
           ))}
         </div>
 
-        <h2 className="mb-3 mt-8 text-lg font-bold text-gray-900">
+        <h2 className="mb-3 mt-6 text-base font-bold text-gray-900 sm:mt-8 sm:text-lg">
           বাজারভিত্তিক আজকের দাম
         </h2>
 
         {markets.length === 0 ? (
           <p className="text-sm text-gray-600">কোনো বাজারের তথ্য নেই।</p>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
-            <table className="w-full min-w-[600px] text-sm">
-              <thead className="bg-gray-50 text-gray-600">
-                <tr>
-                  <th className="p-3 text-left font-medium">বাজার</th>
-                  <th className="p-3 text-left font-medium">বিভাগ</th>
-                  <th className="p-3 text-right font-medium">সর্বনিম্ন</th>
-                  <th className="p-3 text-right font-medium">সর্বাধিক</th>
-                  <th className="p-3 text-right font-medium">গড়</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...markets]
-                  .sort((a, b) => a.min + a.max - (b.min + b.max))
-                  .map((m) => (
+          <>
+            {/* মোবাইল: কার্ড লিস্ট */}
+            <ul className="space-y-3 md:hidden">
+              {sortedMarkets.map((m) => (
+                <li
+                  key={`${m.market}-${m.division}`}
+                  className="rounded-xl border border-gray-200 bg-white p-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-gray-900">
+                        {m.market}
+                      </p>
+                      <p className="text-xs text-gray-600">{m.division}</p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <p className="text-xs text-gray-600">গড়</p>
+                      <p className="font-bold text-gray-900">
+                        {bn((m.min + m.max) / 2)} টাকা
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-2 border-t border-gray-100 pt-2 text-sm">
+                    <p className="text-gray-600">
+                      সর্বনিম্ন{" "}
+                      <span className="block font-medium text-green-600">
+                        {bn(m.min)} টাকা
+                      </span>
+                    </p>
+                    <p className="text-right text-gray-600">
+                      সর্বাধিক{" "}
+                      <span className="block font-medium text-red-600">
+                        {bn(m.max)} টাকা
+                      </span>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {/* ট্যাবলেট/ডেস্কটপ: টেবিল */}
+            <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-gray-600">
+                  <tr>
+                    <th className="p-3 text-left font-medium">বাজার</th>
+                    <th className="p-3 text-left font-medium">বিভাগ</th>
+                    <th className="p-3 text-right font-medium">সর্বনিম্ন</th>
+                    <th className="p-3 text-right font-medium">সর্বাধিক</th>
+                    <th className="p-3 text-right font-medium">গড়</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedMarkets.map((m) => (
                     <tr
                       key={`${m.market}-${m.division}`}
                       className="border-t border-gray-100 even:bg-gray-50"
@@ -193,9 +245,10 @@ const ProductContent = async ({ params }: ProductPageProps) => {
                       </td>
                     </tr>
                   ))}
-              </tbody>
-            </table>
-          </div>
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
     </div>
