@@ -26,10 +26,10 @@ const CategoryContent = async ({
 
   const [categoryRes, productsRes] = await Promise.all([
     fetch(
-      `https://api.api-store.workers.dev/api/bazardor/categories/${categorieslug}`,
+      `https://api.abcz.workers.dev/api/bazardor/categories/${categorieslug}`,
       { cache: "no-store" },
     ),
-    fetch("https://api.api-store.workers.dev/api/bazardor/products", {
+    fetch("https://api.abcz.workers.dev/api/bazardor/products", {
       cache: "no-store",
     }),
   ]);

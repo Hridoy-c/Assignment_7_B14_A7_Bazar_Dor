@@ -82,7 +82,7 @@ export default function Header() {
       <div className="overflow-hidden border-y border-gray-200">
         <Suspense fallback={<p>লোড হচ্ছে...</p>}>
           <div className="py-3">
-            <Marquee pauseOnHover>
+            <Marquee >
               <Marque />
             </Marquee>
           </div>

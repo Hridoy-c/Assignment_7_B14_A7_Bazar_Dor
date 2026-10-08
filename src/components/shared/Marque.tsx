@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface IProduct {
   id: number;
   nameBn: string;
@@ -22,7 +24,7 @@ const change = {
 
 const Marque = async () => {
   const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor/products",
+    "https://api.abcz.workers.dev/api/bazardor/products",
     { cache: "no-store" },
   );
   const data: IProduct[] = await res.json();
@@ -30,14 +32,15 @@ const Marque = async () => {
   return (
     <div className="flex gap-8 overflow-hidden text-sm">
       {data.map((p) => (
-        <span key={p.id} className="flex gap-2 whitespace-nowrap">
+
+        <Link href={`/products/${p.id}`} key={p.id} className="flex gap-2 whitespace-nowrap">
           {p.image} <b>{p.nameBn}</b>
           {p.today.toLocaleString("bn-BD")} টাকা/{units[p.unit]}
           <b className={change[p.change.dir].color}>
             {change[p.change.dir].icon}{" "}
             {Math.abs(p.change.pct).toLocaleString("bn-BD")}%
           </b>
-        </span>
+        </Link>
       ))}
     </div>
   );

@@ -32,16 +32,18 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="bn" 
-      suppressHydrationWarning
+      lang="bn"
+      suppressHydrationWarning 
       className={`${geistSans.variable} ${geistMono.variable} ${hindSiliguri.variable} h-full antialiased`}
     >
-      <body className={`${hindSiliguri.className} min-h-full flex flex-col`}>
+      <body 
+        suppressHydrationWarning 
+        className={`${hindSiliguri.className} min-h-full flex flex-col`}
+      >
         <Header />
         <main className="flex-grow">
           {children}
         </main>
-        <Footer />
       </body>
     </html>
   );

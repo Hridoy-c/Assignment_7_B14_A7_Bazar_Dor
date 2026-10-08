@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export interface IProduct {
   id: number;
   nameBn: string;
@@ -25,6 +27,7 @@ const ProductsCard = ({ product: p }: { product: IProduct }) => {
   const up = p.change.dir === "up";
 
   return (
+    <Link href={`/products/${p.id}`}>
     <div className="rounded-2xl border border-gray-200 bg-white/70 p-4">
       <div className="flex items-center gap-3">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-2xl">
@@ -50,6 +53,7 @@ const ProductsCard = ({ product: p }: { product: IProduct }) => {
         </span>
       </div>
     </div>
+    </Link>
   );
 };
 
