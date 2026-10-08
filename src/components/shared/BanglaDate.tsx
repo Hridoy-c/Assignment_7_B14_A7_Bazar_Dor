@@ -17,5 +17,5 @@ export default function BanglaDate() {
     );
   }, []);
 
-  return <>{date}</>;
+  return <span>{date}</span>;
 }

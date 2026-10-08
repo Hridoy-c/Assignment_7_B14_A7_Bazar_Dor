@@ -2,15 +2,15 @@ import Link from "next/link";
 import Marquee from "react-fast-marquee";
 import NavList from "./NavList";
 import Marque from "./Marque";
-import BanglaDate from "./BanglaDate";
+import BanglaDate from "@/components/shared/BanglaDate";
 import { Suspense } from "react";
 
 export default function Header() {
   return (
-    <header className=" bg-white">
-      <div className=" border-b border-gray-200">
-        <nav className="mx-auto flex h-16 max-w-[90vw] items-center justify-between gap-3 px-4">
-          <Link href="/" className="flex min-w-0 items-center gap-2">
+    <header className="w-full bg-white">
+      <div className="border-b border-gray-200">
+        <nav className="mx-auto flex h-16 w-full items-center justify-between gap-3 px-4 sm:max-w-[90vw]">
+          <Link href="/" className="flex min-w-0 flex-1 items-center gap-2">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-700 text-lg text-white sm:h-10 sm:w-10 sm:text-xl">
               🛒
             </span>
@@ -28,7 +28,7 @@ export default function Header() {
             <Link
               href="/signin"
               aria-label="সাইন ইন"
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 sm:h-auto sm:w-auto sm:border-0 sm:px-2"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-800 sm:h-auto sm:w-auto sm:border-0 sm:px-2"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -82,7 +82,7 @@ export default function Header() {
       <div className="overflow-hidden border-y border-gray-200">
         <Suspense fallback={<p>লোড হচ্ছে...</p>}>
           <div className="py-3">
-            <Marquee>
+            <Marquee pauseOnHover>
               <Marque />
             </Marquee>
           </div>
