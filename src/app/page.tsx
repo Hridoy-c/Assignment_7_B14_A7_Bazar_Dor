@@ -5,7 +5,7 @@ import AllProducts from "@/components/homepage/AllProducts";
 
 const page = () => {
   return (
-    <div>
+    <div className="mx-auto max-w-[90vw] px-4 py-6 sm:py-10">
       <Hero />
       <Suspense
         fallback={

@@ -41,7 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         className={`${hindSiliguri.className} min-h-full flex flex-col`}
       >
         <Header />
-        <main className="flex-grow">
+        <main className="flex-grow ">
           {children}
         </main>
       </body>
