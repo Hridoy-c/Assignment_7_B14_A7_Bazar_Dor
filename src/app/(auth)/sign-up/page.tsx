@@ -1,12 +1,67 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signUp, signIn } from "@/lib/auth-client";
 
 const inputClass =
-  "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20";
+  "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 disabled:opacity-60";
 
 const socialClass =
-  "flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
+  "flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 disabled:opacity-60";
 
 export default function SignUpPage() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    const form = new FormData(e.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
+    const email = String(form.get("email") ?? "").trim();
+    const password = String(form.get("password") ?? "");
+    const confirm = String(form.get("confirm") ?? "");
+    const image = String(form.get("image") ?? "");
+
+    if (password.length < 8) {
+      setError("পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।");
+      return;
+    }
+    if (password !== confirm) {
+      setError("পাসওয়ার্ড দুটি মিলছে না।");
+      return;
+    }
+
+    setLoading(true);
+    const { error: authError } = await signUp.email({ name, email, password, image });
+    setLoading(false);
+
+    if (authError) {
+      setError(authError.message || "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।");
+      return;
+    }
+
+    router.push("/");
+    router.refresh();
+  };
+
+  const handleSocial = async (provider: "google" | "github") => {
+    setError("");
+    setLoading(true);
+    const { error: authError } = await signIn.social({
+      provider,
+      callbackURL: "/",
+    });
+    if (authError) {
+      setLoading(false);
+      setError(authError.message || "সোশ্যাল লগইন করা যায়নি।");
+    }
+  };
+
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
       <div className="text-center">
@@ -17,14 +72,17 @@ export default function SignUpPage() {
       </div>
 
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white/70 p-5 sm:p-6">
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="text-sm font-medium text-gray-900">
               নাম
             </label>
             <input
               id="name"
+              name="name"
               type="text"
+              required
+              disabled={loading}
               autoComplete="name"
               placeholder="যেমন: রহিম উদ্দিন"
               className={inputClass}
@@ -37,7 +95,10 @@ export default function SignUpPage() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
+              required
+              disabled={loading}
               autoComplete="email"
               placeholder="you@example.com"
               className={inputClass}
@@ -50,7 +111,11 @@ export default function SignUpPage() {
             </label>
             <input
               id="password"
+              name="password"
               type="password"
+              required
+              minLength={8}
+              disabled={loading}
               autoComplete="new-password"
               placeholder="কমপক্ষে ৮ অক্ষর"
               className={inputClass}
@@ -63,19 +128,48 @@ export default function SignUpPage() {
             </label>
             <input
               id="confirm"
+              name="confirm"
               type="password"
+              required
+              minLength={8}
+              disabled={loading}
               autoComplete="new-password"
               placeholder="আবার লিখুন"
               className={inputClass}
             />
           </div>
+          <div>
+            <label htmlFor="confirm" className="text-sm font-medium text-gray-900">
+              প্রোফাইল ছবি
+            </label>
+            <input
+              id="image"
+              name="image"
+              type="url"
+              required
+              minLength={8}
+              disabled={loading}
+              autoComplete="new-password"
+              placeholder="প্রোফাইল ছবি লিখুন যেমন: https://example.com/image.jpg  "
+              className={inputClass}
+            />
+          </div>
 
-          {/* UI only: switch to type="submit" when you add the submit logic */}
+          {error && (
+            <p
+              role="alert"
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600"
+            >
+              {error}
+            </p>
+          )}
+
           <button
-            type="button"
-            className="w-full rounded-lg bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/30 transition-colors hover:bg-green-800"
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/30 transition-colors hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            অ্যাকাউন্ট তৈরি করুন
+            {loading ? "অপেক্ষা করুন..." : "অ্যাকাউন্ট তৈরি করুন"}
           </button>
         </form>
 
@@ -86,7 +180,12 @@ export default function SignUpPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <button type="button" className={socialClass}>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleSocial("google")}
+            className={socialClass}
+          >
             <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
               <path
                 fill="#4285F4"
@@ -108,7 +207,12 @@ export default function SignUpPage() {
             Google দিয়ে চালিয়ে যান
           </button>
 
-          <button type="button" className={socialClass}>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleSocial("github")}
+            className={socialClass}
+          >
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"

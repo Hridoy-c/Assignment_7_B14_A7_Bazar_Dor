@@ -1,12 +1,44 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "@/lib/auth-client";
 
 const inputClass =
-  "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20";
+  "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 disabled:opacity-60";
 
 const socialClass =
-  "flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
+  "flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50 disabled:opacity-60";
 
 export default function SignInPage() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    const form = new FormData(e.currentTarget);
+    const email = String(form.get("email") ?? "").trim();
+    const password = String(form.get("password") ?? "");
+
+    setLoading(true);
+    const { error: authError } = await signIn.email({ email, password });
+    setLoading(false);
+
+    if (authError) {
+      setError(
+        authError.message || "ইমেইল বা পাসওয়ার্ড ভুল। আবার চেষ্টা করুন।",
+      );
+      return;
+    }
+
+    router.push("/");
+    router.refresh();
+  };
+
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
       <div className="text-center">
@@ -17,14 +49,20 @@ export default function SignInPage() {
       </div>
 
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white/70 p-5 sm:p-6">
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-900">
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-gray-900"
+            >
               ইমেইল
             </label>
             <input
               id="email"
+              name="email"
               type="email"
+              required
+              disabled={loading}
               autoComplete="email"
               placeholder="you@example.com"
               className={inputClass}
@@ -32,24 +70,40 @@ export default function SignInPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="text-sm font-medium text-gray-900">
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-gray-900"
+            >
               পাসওয়ার্ড
             </label>
             <input
               id="password"
+              name="password"
               type="password"
+              required
+              minLength={8}
+              disabled={loading}
               autoComplete="current-password"
               placeholder="কমপক্ষে ৮ অক্ষর"
               className={inputClass}
             />
           </div>
 
-          {/* UI only: switch to type="submit" when you add the submit logic */}
+          {error && (
+            <p
+              role="alert"
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600"
+            >
+              {error}
+            </p>
+          )}
+
           <button
-            type="button"
-            className="w-full rounded-lg bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/30 transition-colors hover:bg-green-800"
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-green-700 py-2.5 text-sm font-semibold text-white shadow-md shadow-green-700/30 transition-colors hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            সাইন ইন
+            {loading ? "অপেক্ষা করুন..." : "সাইন ইন"}
           </button>
         </form>
 
@@ -60,7 +114,7 @@ export default function SignInPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <button type="button" className={socialClass}>
+          <button type="button" disabled={loading} className={socialClass}>
             <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
               <path
                 fill="#4285F4"
@@ -82,7 +136,7 @@ export default function SignInPage() {
             Google দিয়ে চালিয়ে যান
           </button>
 
-          <button type="button" className={socialClass}>
+          <button type="button" disabled={loading} className={socialClass}>
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"
