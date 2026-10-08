@@ -26,7 +26,7 @@ export default function Header() {
 
           <div className="flex shrink-0 items-center gap-2 text-sm font-semibold sm:gap-3">
             <Link
-              href="/signin"
+              href="/sign-in"
               aria-label="সাইন ইন"
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-800 sm:h-auto sm:w-auto sm:border-0 sm:px-2"
             >
@@ -48,7 +48,7 @@ export default function Header() {
             </Link>
 
             <Link
-              href="/signup"
+              href="/sign-up"
               aria-label="সাইন আপ"
               className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-700 text-white sm:h-auto sm:w-auto sm:rounded-xl sm:px-4 sm:py-2"
             >
