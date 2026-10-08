@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ProductDetailsSkeleton from "@/components/skeletonpage/ProductDetailsSkeleton";
 
 interface IMarket {
   market: string;
@@ -92,22 +93,21 @@ const ProductContent = async ({ params }: ProductPageProps) => {
 
   return (
     <div className="mx-auto max-w-[90vw] space-y-6 px-4 py-6">
-     
-      <nav className="text-sm text-gray-600">
+      <nav className="flex gap-2 text-sm text-gray-600">
         <Link href="/" className="hover:text-green-700">
           হোম
-        </Link>{" "}
-        ›{" "}
+        </Link>
+        <span>›</span>
         <Link
           href={`/categories/${product.category}`}
           className="hover:text-green-700"
         >
           {product.categoryNameBn}
-        </Link>{" "}
-        › <span className="text-gray-900">{product.nameBn}</span>
+        </Link>
+        <span>›</span>
+        <span className="text-gray-900">{product.nameBn}</span>
       </nav>
 
-  
       <section className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/70 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-4xl">
@@ -137,7 +137,6 @@ const ProductContent = async ({ params }: ProductPageProps) => {
         </div>
       </section>
 
-    
       <section className="rounded-2xl border border-gray-200 bg-white/70 p-5">
         <h2 className="mb-4 text-lg font-bold text-gray-900">
           দামের সারসংক্ষেপ
@@ -204,9 +203,7 @@ const ProductContent = async ({ params }: ProductPageProps) => {
 };
 
 const ProductDetailsPage = (props: ProductPageProps) => (
-  <Suspense
-    fallback={<p className="mx-auto max-w-[90vw] px-4 py-6">লোড হচ্ছে...</p>}
-  >
+  <Suspense fallback={<ProductDetailsSkeleton />}>
     <ProductContent {...props} />
   </Suspense>
 );

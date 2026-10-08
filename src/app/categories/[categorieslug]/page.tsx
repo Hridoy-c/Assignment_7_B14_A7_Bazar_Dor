@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import ProductsCard, { type IProduct } from "@/components/shared/ProductsCard";
 import Sortselct from "@/components/shared/Sortselct";
+import CategorySkeleton from "@/components/skeletonpage/CategorySkeleton";
 
 type Product = IProduct & { category: string };
 
@@ -35,6 +36,7 @@ const CategoryContent = async ({
   ]);
 
   if (!categoryRes.ok) notFound();
+  if (!productsRes.ok) return null;
 
   const category = await categoryRes.json();
   const data = await productsRes.json();
@@ -47,7 +49,6 @@ const CategoryContent = async ({
 
   return (
     <div className="mx-auto max-w-[90vw] px-4 py-6">
-   
       <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white/70 p-5">
         <span className="text-4xl">{category.icon}</span>
         <div>
@@ -58,26 +59,31 @@ const CategoryContent = async ({
         </div>
       </div>
 
-  
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white/70 p-4">
         <Sortselct />
       </div>
 
-      <p className="mt-4 mb-3 text-sm text-gray-600">
+      <p className="mb-3 mt-4 text-sm text-gray-600">
         মোট {count}টি পণ্য দেখানো হচ্ছে
       </p>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((p) => (
-          <ProductsCard key={p.id} product={p} />
-        ))}
-      </div>
+      {items.length === 0 ? (
+        <p className="py-10 text-center text-gray-600">
+          এই ক্যাটাগরিতে কোনো পণ্য নেই।
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((p) => (
+            <ProductsCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
 const CategoryDetailsPage = (props: CategoryDetailsPageProps) => (
-  <Suspense fallback={<p className="px-4 py-6">লোড হচ্ছে...</p>}>
+  <Suspense fallback={<CategorySkeleton />}>
     <CategoryContent {...props} />
   </Suspense>
 );

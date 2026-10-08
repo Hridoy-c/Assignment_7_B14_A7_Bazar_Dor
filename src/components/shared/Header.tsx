@@ -4,6 +4,8 @@ import NavList from "./NavList";
 import Marque from "./Marque";
 import BanglaDate from "@/components/shared/BanglaDate";
 import { Suspense } from "react";
+import NavListSkeleton from "../skeletonpage/NavListSkeleton";
+import MarqueSkeleton from "../skeletonpage/MarqueSkeleton";
 
 export default function Header() {
   return (
@@ -74,13 +76,13 @@ export default function Header() {
       </div>
 
       <div className="mx-auto max-w-[90vw] overflow-x-auto px-4 [scrollbar-width:none]">
-        <Suspense fallback={<p>লোড হচ্ছে...</p>}>
+        <Suspense fallback={<NavListSkeleton />}>
           <NavList />
         </Suspense>
       </div>
 
       <div className="overflow-hidden border-y border-gray-200">
-        <Suspense fallback={<p>লোড হচ্ছে...</p>}>
+        <Suspense fallback={<MarqueSkeleton/>}>
           <div className="py-3">
             <Marquee >
               <Marque />

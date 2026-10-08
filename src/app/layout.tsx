@@ -3,7 +3,7 @@ import Header from "../components/shared/Header";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/shared/Footer";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 🌟 বাংলা ফন্টটি এখানে যুক্ত করা হয়েছে (ওয়েট এবং সাবসেট সহ)
+
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
   subsets: ["bengali"],
@@ -38,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body 
         suppressHydrationWarning 
-        className={`${hindSiliguri.className} min-h-full flex flex-col`}
+        className={`${hindSiliguri.className} flex min-h-full flex-col bg-green-50 text-gray-900`}
       >
         <Header />
         <main className="flex-grow ">
