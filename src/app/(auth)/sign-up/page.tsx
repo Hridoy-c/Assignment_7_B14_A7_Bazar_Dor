@@ -37,7 +37,7 @@ export default function SignUpPage() {
     }
 
     setLoading(true);
-    const { error: authError } = await signUp.email({ name, email, password, image });
+    const { error: authError } = await signUp.email({ name, email, password, image  });
     setLoading(false);
 
     if (authError) {
@@ -49,18 +49,18 @@ export default function SignUpPage() {
     router.refresh();
   };
 
-  const handleSocial = async (provider: "google" | "github") => {
-    setError("");
-    setLoading(true);
-    const { error: authError } = await signIn.social({
-      provider,
-      callbackURL: "/",
-    });
-    if (authError) {
-      setLoading(false);
-      setError(authError.message || "সোশ্যাল লগইন করা যায়নি।");
-    }
-  };
+const signInWithGoogle = async () => {
+  const data = await signIn.social({
+    provider: "google",
+  });
+};
+
+const signInWithGithub = async () => {
+    const data = await signIn.social({
+        provider: "github"
+    })
+}
+
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
@@ -146,7 +146,7 @@ export default function SignUpPage() {
               id="image"
               name="image"
               type="url"
-              required
+
               minLength={8}
               disabled={loading}
               autoComplete="new-password"
@@ -181,9 +181,10 @@ export default function SignUpPage() {
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <button
+            onClick={signInWithGoogle}
+          
             type="button"
             disabled={loading}
-            onClick={() => handleSocial("google")}
             className={socialClass}
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
@@ -208,9 +209,9 @@ export default function SignUpPage() {
           </button>
 
           <button
+            onClick={signInWithGithub}
             type="button"
             disabled={loading}
-            onClick={() => handleSocial("github")}
             className={socialClass}
           >
             <svg

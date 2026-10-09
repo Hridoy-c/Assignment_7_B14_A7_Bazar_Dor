@@ -47,7 +47,7 @@ const NavButton = () => {
           >
             <div className="relative h-9 w-9 overflow-hidden rounded-full border border-gray-200">
               <Image
-                src={session?.user?.image || "/default-avatar.png"} // ইউজারের ইমেজ না থাকলে public ফোল্ডারের default-avatar.png দেখাবে
+                src={session?.user?.image || "https://images.unsplash.com/photo-1740252117044-2af197eea287?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YXZhdGFyJTIwbWFufGVufDB8fDB8fHww"} // ইউজারের ইমেজ না থাকলে public ফোল্ডারের default-avatar.png দেখাবে
                 alt={session?.user?.name || "User profile"}
                 fill
                 sizes="36px"

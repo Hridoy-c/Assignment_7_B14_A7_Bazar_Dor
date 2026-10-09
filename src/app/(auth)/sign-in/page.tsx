@@ -39,6 +39,19 @@ export default function SignInPage() {
     router.refresh();
   };
 
+
+  const signInWithGoogle = async () => {
+    const data = await signIn.social({
+      provider: "google",
+    });
+  };
+  
+  const signInWithGithub = async () => {
+      const data = await signIn.social({
+          provider: "github"
+      })
+  }
+
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
       <div className="text-center">
@@ -114,7 +127,9 @@ export default function SignInPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <button type="button" disabled={loading} className={socialClass}>
+          <button
+            onClick={signInWithGoogle}
+           type="button" disabled={loading} className={socialClass}>
             <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
               <path
                 fill="#4285F4"
@@ -136,7 +151,9 @@ export default function SignInPage() {
             Google দিয়ে চালিয়ে যান
           </button>
 
-          <button type="button" disabled={loading} className={socialClass}>
+          <button
+            onClick={signInWithGithub}
+           type="button" disabled={loading} className={socialClass}>
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"

@@ -9,8 +9,7 @@ interface INavCategoryProps {
 
 const NavList = async () => {
   const res = await fetch(
-    "https://api.abcz.workers.dev/api/bazardor/categories",
-    { cache: "no-store" },
+    "https://api.api-store.workers.dev/api/bazardor/categories"
   );
   const data = await res.json();
 
