@@ -95,6 +95,8 @@ const ProductContent = async ({ params }: ProductPageProps) => {
     },
   ];
 
+  
+
   return (
     <div className="mx-auto max-w-[90vw] space-y-4 px-4 py-4 sm:space-y-6 sm:py-6">
       {/* ব্রেডক্রাম্ব */}
