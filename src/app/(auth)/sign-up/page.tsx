@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp, signIn } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 const inputClass =
   "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 disabled:opacity-60";
@@ -37,28 +38,44 @@ export default function SignUpPage() {
     }
 
     setLoading(true);
-    const { error: authError } = await signUp.email({ name, email, password, image  });
+    const { error: authError } = await signUp.email({ name, email, password, image: image || undefined  });
     setLoading(false);
 
     if (authError) {
       setError(authError.message || "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।");
       return;
     }
-
+    toast.success("সফলভাবে অ্যাকাউন্ট তৈরি হয়েছে");
     router.push("/");
     router.refresh();
   };
 
 const signInWithGoogle = async () => {
-  const data = await signIn.social({
-    provider: "google",
-  });
+  try {
+      setLoading(true);
+      toast.info("গুগল দিয়ে কানেক্ট করা হচ্ছে...");
+      await signIn.social({
+        provider: "google",
+        callbackURL: "/"
+      });
+    } catch (err) {
+      toast.error("গুগল সাইন-আপ ব্যর্থ হয়েছে।");
+      setLoading(false);
+    }
 };
 
 const signInWithGithub = async () => {
-    const data = await signIn.social({
-        provider: "github"
-    })
+    try {
+      setLoading(true);
+      toast.info("গিটহাব দিয়ে কানেক্ট করা হচ্ছে...");
+      await signIn.social({
+        provider: "github",
+        callbackURL: "/"
+      });
+    } catch (err) {
+      toast.error("গিটহাব সাইন-আপ ব্যর্থ হয়েছে।");
+      setLoading(false);
+    }
 }
 
 

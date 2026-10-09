@@ -99,7 +99,7 @@ const ProductContent = async ({ params }: ProductPageProps) => {
 
   return (
     <div className="mx-auto max-w-[90vw] space-y-4 px-4 py-4 sm:space-y-6 sm:py-6">
-      {/* ব্রেডক্রাম্ব */}
+   
       <nav className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-600 sm:text-sm">
         <Link href="/" className="hover:text-green-700">
           হোম
@@ -115,7 +115,7 @@ const ProductContent = async ({ params }: ProductPageProps) => {
         <span className="text-gray-900">{product.nameBn}</span>
       </nav>
 
-      {/* হেডার কার্ড */}
+     
       <section className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-5 md:flex-row md:items-center md:justify-between">
         <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-3xl sm:h-20 sm:w-20 sm:text-4xl">
@@ -151,7 +151,7 @@ const ProductContent = async ({ params }: ProductPageProps) => {
         </div>
       </section>
 
-      {/* সারসংক্ষেপ + বাজারভিত্তিক দাম */}
+     
       <section className="rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-5">
         <h2 className="mb-3 text-base font-bold text-gray-900 sm:mb-4 sm:text-lg">
           দামের সারসংক্ষেপ
@@ -181,7 +181,7 @@ const ProductContent = async ({ params }: ProductPageProps) => {
           <p className="text-sm text-gray-600">কোনো বাজারের তথ্য নেই।</p>
         ) : (
           <>
-            {/* মোবাইল: কার্ড লিস্ট */}
+           
             <ul className="space-y-3 md:hidden">
               {sortedMarkets.map((m) => (
                 <li
@@ -220,7 +220,7 @@ const ProductContent = async ({ params }: ProductPageProps) => {
               ))}
             </ul>
 
-            {/* ট্যাবলেট/ডেস্কটপ: টেবিল */}
+           
             <div className="hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 text-gray-600">

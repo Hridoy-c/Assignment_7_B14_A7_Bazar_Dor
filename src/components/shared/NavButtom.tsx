@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const NavButton = () => {
   const router = useRouter();
@@ -32,6 +33,7 @@ const NavButton = () => {
 
   const handleSignOut = async () => {
     await signOut();
+     toast.success("সফলভাবে সাইন আউট করা হয়েছে");
     setIsOpen(false);
     router.refresh();
     router.push("/sign-in");

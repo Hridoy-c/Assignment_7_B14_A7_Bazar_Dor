@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 বাজার দর (Bazar Dor)
 
-## Getting Started
+> প্রতিদিনের বাজারের পণ্যের দাম এক জায়গায় দেখুন, বাজার অনুযায়ী তুলনা করুন এবং সঠিক সিদ্ধান্ত নিন।
 
-First, run the development server:
+## 📖 Description
+
+**বাজার দর (Bazar Dor)** একটি আধুনিক ওয়েব অ্যাপ্লিকেশন, যেখানে ব্যবহারকারীরা বিভিন্ন নিত্যপ্রয়োজনীয় পণ্যের বাজারদর দেখতে পারেন। পণ্যগুলো ক্যাটাগরি অনুযায়ী সাজানো এবং প্রতিটি পণ্যের বিস্তারিত পেজে বিভিন্ন বাজারের সর্বনিম্ন ও সর্বোচ্চ দাম দেখা যায়। এতে ক্রেতারা সহজেই বুঝতে পারেন কোথায় কত দামে পণ্য পাওয়া যাচ্ছে।
+
+এই প্রজেক্টটি **Programming Hero – Assignment 7** এর অংশ হিসেবে তৈরি।
+
+## 🛠️ Technologies Used
+
+| প্রযুক্তি | ব্যবহার |
+|-----------|---------|
+| [Next.js](https://nextjs.org/) (App Router) | ফ্রেমওয়ার্ক, রাউটিং ও ডাইনামিক পেজ |
+| [React](https://react.dev/) | UI কম্পোনেন্ট |
+| [Tailwind CSS](https://tailwindcss.com/) | স্টাইলিং ও রেসপন্সিভ ডিজাইন |
+| Better Auth (auth client) | সাইন-ইন ও সাইন-আপ |
+| REST API (`/api/bazardor/`) | পণ্য ও ক্যাটাগরির ডেটা |
+
+
+## ✨ Features
+
+- 🏠 **হোম পেজ** – জনপ্রিয় পণ্য ও ক্যাটাগরির সংক্ষিপ্ত পরিচিতি
+- 🗂️ **ক্যাটাগরি ভিত্তিক ব্রাউজিং** – `/categories/[categorieslug]` পেজে ক্যাটাগরি অনুযায়ী পণ্যের তালিকা
+- 🔍 **পণ্যের বিস্তারিত পেজ** – `/products/[productId]` পেজে পণ্যের পূর্ণ তথ্য
+- 💰 **বাজারভিত্তিক দামের তুলনা** – প্রতিটি বাজারের সর্বনিম্ন (min) ও সর্বোচ্চ (max) দাম
+- 🔐 **সাইন-ইন ও সাইন-আপ পেজ** – ইমেইল দিয়ে অ্যাকাউন্ট তৈরি ও লগইন
+- 📱 **সম্পূর্ণ রেসপন্সিভ ডিজাইন** – মোবাইল, ট্যাবলেট ও ডেস্কটপে সুন্দরভাবে কাজ করে
+- ⚡ **ডাইনামিক রাউটিং ও দ্রুত লোডিং** – Next.js App Router দিয়ে তৈরি
+
+## 🗺️ Routes
+
+| Route | বিবরণ |
+|-------|--------|
+| `/` | হোম পেজ |
+| `/categories/[categorieslug]` | ক্যাটাগরির পণ্যের তালিকা |
+| `/products/[productId]` | পণ্যের বিস্তারিত |
+| `/sign-in` | লগইন পেজ |
+| `/sign-up` | রেজিস্ট্রেশন পেজ |
+
+## 🚀 Getting Started
 
 ```bash
+# ১. রিপোজিটরি ক্লোন করুন
+git clone <your-repository-url>
+cd bazardor
+
+# ২. ডিপেন্ডেন্সি ইনস্টল করুন
+npm install
+
+# ৩. ডেভেলপমেন্ট সার্ভার চালু করুন
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+এরপর ব্রাউজারে [http://localhost:3000](http://localhost:3000) খুলুন।
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📄 License
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+এই প্রজেক্টটি শেখার উদ্দেশ্যে তৈরি করা হয়েছে।

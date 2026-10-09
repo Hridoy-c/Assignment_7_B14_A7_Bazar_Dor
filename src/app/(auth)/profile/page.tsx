@@ -1,47 +1,43 @@
 "use client";
 
-import {  useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut, updateUser } from "@/lib/auth-client";
 import ProfileSkeleton from "@/components/skeletonpage/ProfileSkeleton";
 import Image from "next/image";
-
+import { toast } from "react-toastify";
 
 const inputClass =
   "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 disabled:opacity-60";
 
-
 const ProfilePage = () => {
   const router = useRouter();
   const { data: session, isPending } = useSession();
-
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{
-    type: "success" | "error";
-    text: string;
-  } | null>(null);
-
-
 
   if (isPending || !session) return <ProfileSkeleton />;
 
   const { user } = session;
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
-    router.refresh();
+    try {
+      await signOut();
+      toast.success("সফলভাবে সাইন আউট করা হয়েছে");
+      router.push("/");
+      router.refresh();
+    } catch (err) {
+      toast.error("সাইন আউট করতে সমস্যা হয়েছে।");
+    }
   };
 
   const handleUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setMessage(null);
 
     const form = new FormData(e.currentTarget);
     const name = String(form.get("name") ?? "").trim();
 
     if (!name) {
-      setMessage({ type: "error", text: "নাম খালি রাখা যাবে না।" });
+      toast.warn("নাম খালি রাখা যাবে না।");
       return;
     }
 
@@ -50,38 +46,34 @@ const ProfilePage = () => {
     setSaving(false);
 
     if (error) {
-      setMessage({
-        type: "error",
-        text: error.message || "আপডেট করা যায়নি। আবার চেষ্টা করুন।",
-      });
+      toast.error(error.message || "আপডেট করা যায়নি। আবার চেষ্টা করুন।");
       return;
     }
 
-    setMessage({ type: "success", text: "নাম সফলভাবে আপডেট হয়েছে।" });
+    // 🌟 সফল আপডেটের পর স্টেট মেসেজের পরিবর্তে আধুনিক টোস্ট নোটিফিকেশন
+    toast.success("নাম সফলভাবে আপডেট হয়েছে।");
     router.refresh();
   };
 
-  
-
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-6">
+    <div className="mx-auto w-full max-w-3xl px-4 py-6 font-bangla">
       <h1 className="text-2xl font-bold text-gray-900">আমার প্রোফাইল</h1>
       <p className="mt-1 text-sm text-gray-600">
         আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।
       </p>
 
-    
       <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/70 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-center gap-4">
           {user.image ? (
-       
-            <Image
-              src={user.image}
-              alt={user.name}
-              width={80}
-              height={80}
-              className="h-20 w-20 shrink-0 rounded-2xl bg-gray-100 object-cover"
-            />
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-gray-100">
+              <Image
+                src={user.image}
+                alt={user.name || "User"}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </div>
           ) : (
             <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-green-700 text-3xl font-bold text-white">
               {user.name?.charAt(0).toUpperCase()}
@@ -119,9 +111,8 @@ const ProfilePage = () => {
         </button>
       </div>
 
-      
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white/70 p-5">
-        <h2 className="text-lg font-bold text-gray-900">তথ্য</h2>
+        <h2 className="text-lg font-bold text-gray-900">তথ্য আপডেট করুন</h2>
 
         <form onSubmit={handleUpdate} className="mt-4 space-y-4 px-0 sm:px-3">
           <div>
@@ -140,19 +131,6 @@ const ProfilePage = () => {
               className={inputClass}
             />
           </div>
-
-          {message && (
-            <p
-              role={message.type === "error" ? "alert" : "status"}
-              className={`rounded-lg border px-3 py-2 text-sm ${
-                message.type === "error"
-                  ? "border-red-200 bg-red-50 text-red-600"
-                  : "border-green-200 bg-green-50 text-green-700"
-              }`}
-            >
-              {message.text}
-            </p>
-          )}
 
           <button
             type="submit"

@@ -3,6 +3,8 @@ import Header from "../components/shared/Header";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/shared/Footer";
+import ToastProvider from "@/components/shared/ToastProvider";
 
 
 const geistSans = Geist({
@@ -40,10 +42,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         suppressHydrationWarning 
         className={`${hindSiliguri.className} flex min-h-full flex-col bg-green-50 text-gray-900`}
       >
+        <ToastProvider />
         <Header />
         <main className="flex-grow ">
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 const inputClass =
   "mt-1.5 h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-500 focus:border-green-700 focus:ring-2 focus:ring-green-700/20 disabled:opacity-60";
@@ -28,28 +29,52 @@ export default function SignInPage() {
     const { error: authError } = await signIn.email({ email, password });
     setLoading(false);
 
-    if (authError) {
-      setError(
-        authError.message || "ইমেইল বা পাসওয়ার্ড ভুল। আবার চেষ্টা করুন।",
-      );
+    if (!email || !password) {
+      toast.warn("দয়া করে ইমেইল এবং পাসওয়ার্ড দুটিই লিখুন।");
       return;
     }
 
+    if (authError) {
+      toast.error("লগইন ব্যর্থ হয়েছে! সঠিক তথ্য দিন।");
+      setError(
+        authError.message || "ইমেইল বা পাসওয়ার্ড ভুল। আবার চেষ্টা করুন।",
+        
+        
+      );
+      return;
+    }
+    toast.success("সফলভাবে লগইন হয়েছে");
     router.push("/");
     router.refresh();
   };
 
 
   const signInWithGoogle = async () => {
-    const data = await signIn.social({
-      provider: "google",
-    });
+    try {
+      setLoading(true);
+      toast.info("গুগল দিয়ে কানেক্ট করা হচ্ছে...");
+      await signIn.social({
+        provider: "google",
+        callbackURL: "/"
+      });
+    } catch (err) {
+      toast.error("গুগল সাইন-ইন করতে ব্যর্থ হয়েছে।");
+      setLoading(false);
+    }
   };
   
   const signInWithGithub = async () => {
-      const data = await signIn.social({
-          provider: "github"
-      })
+      try {
+      setLoading(true);
+      toast.info("গিটহাব দিয়ে কানেক্ট করা হচ্ছে...");
+      await signIn.social({
+        provider: "github",
+        callbackURL: "/"
+      });
+    } catch (err) {
+      toast.error("গিটহাব সাইন-ইন করতে ব্যর্থ হয়েছে।");
+      setLoading(false);
+    }
   }
 
   return (
